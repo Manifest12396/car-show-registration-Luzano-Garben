@@ -1,0 +1,104 @@
+@Api_HostAddress = http://localhost:5205
+
+### Create registration
+POST {{Api_HostAddress}}/api/registrations
+Content-Type: application/json
+
+{
+  "participantName": "Alex Rivera",
+  "contactNumber": "09171234567",
+  "email": "alex.rivera@example.com",
+  "address": "123 Quezon Avenue, Quezon City",
+  "carMakeModel": "Toyota GR Supra",
+  "plateNumber": "ABC-2027",
+  "registrationType": "Competitor",
+  "amountPaid": 1500
+}
+
+###
+
+### Create validation error
+POST {{Api_HostAddress}}/api/registrations
+Content-Type: application/json
+
+{
+  "participantName": "",
+  "contactNumber": "12345",
+  "email": "not-an-email",
+  "address": "",
+  "carMakeModel": "",
+  "plateNumber": "",
+  "registrationType": "Unknown",
+  "amountPaid": -1
+}
+
+###
+
+### Duplicate plate 409
+POST {{Api_HostAddress}}/api/registrations
+Content-Type: application/json
+
+{
+  "participantName": "Duplicate Plate",
+  "contactNumber": "09179876543",
+  "email": "duplicate@example.com",
+  "address": "456 Makati Avenue, Makati",
+  "carMakeModel": "Honda Civic",
+  "plateNumber": "ABC-2027",
+  "registrationType": "Exhibitor",
+  "amountPaid": 500
+}
+
+###
+
+### Paged list
+GET {{Api_HostAddress}}/api/registrations?page=1&pageSize=10
+Accept: application/json
+
+###
+
+### Filter by participant and combined type/status
+GET {{Api_HostAddress}}/api/registrations?participantName=mar&type=Exhibitor&status=Confirmed&page=1&pageSize=10
+Accept: application/json
+
+###
+
+### Get by ID 200
+@RegistrationId = 00000000-0000-0000-0000-000000000001
+GET {{Api_HostAddress}}/api/registrations/{{RegistrationId}}
+Accept: application/json
+
+###
+
+### Get by ID 404
+GET {{Api_HostAddress}}/api/registrations/11111111-1111-1111-1111-111111111111
+Accept: application/json
+
+###
+
+### Summary
+GET {{Api_HostAddress}}/api/registrations/summary
+Accept: application/json
+
+###
+
+### Update registration
+PUT {{Api_HostAddress}}/api/registrations/{{RegistrationId}}
+Content-Type: application/json
+
+{
+  "participantName": "Alex Rivera Updated",
+  "contactNumber": "09171234567",
+  "email": "alex.updated@example.com",
+  "address": "456 Updated Avenue, Quezon City",
+  "carMakeModel": "Nissan GT-R",
+  "plateNumber": "UPDATED-2027",
+  "registrationType": "Competitor",
+  "status": "Confirmed",
+  "amountPaid": 2500
+}
+
+###
+
+### Delete registration
+DELETE {{Api_HostAddress}}/api/registrations/{{RegistrationId}}
